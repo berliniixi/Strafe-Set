@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Drive : MonoBehaviour {
 
-	public float speed = 20.0F;
-
+	[SerializeField] private float speed = 20.0F;
+	[SerializeField] private float turnSpeed = 20f;
+	[SerializeField] private float running = 50f;
     Animator anim;
-    bool move = false;
+    [SerializeField] bool move; //false
 
     void Start()
     {
@@ -19,7 +20,8 @@ public class Drive : MonoBehaviour {
         float translationZ = Input.GetAxis("Vertical") * speed;
         translationX *= Time.deltaTime;
         translationZ *= Time.deltaTime;
-
+        
+        
         //transform.Translate(0, 0, translationX);
         //transform.Rotate(0, rotation, 0);
 
@@ -28,6 +30,9 @@ public class Drive : MonoBehaviour {
         else
         	move = true;
 
+        float turnAmount = Mathf.Atan2(translationX, translationZ);
+        transform.Rotate(0,turnAmount * turnSpeed * Time.deltaTime , 0);
+        
         anim.SetBool("Running", move);
         anim.SetFloat ("VelocityX", translationX);
 		anim.SetFloat ("VelocityZ", translationZ);
